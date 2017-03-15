@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:gravity="center"
+        android:padding="8dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:text="@string/song_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageButton
+            android:nextFocusRight="@+id/play_pause_iv"
+            android:nextFocusForward="@+id/play_pause_iv"
+            android:layout_margin="15dp"
+            android:layout_weight="1"
+            android:src="@android:drawable/ic_media_previous"
+            android:id="@+id/prev_iv"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circular_focusable_button_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:nextFocusLeft="@+id/prev_iv"
+            android:nextFocusRight="@+id/next_iv"
+            android:nextFocusForward="@+id/next_iv"
+            android:src="@android:drawable/ic_media_play"
+            android:layout_margin="15dp"
+            android:layout_weight="1.5"
+            android:id="@+id/play_pause_iv"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circular_focusable_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <ImageButton
+            android:nextFocusLeft="@+id/play_pause_iv"
+            android:nextFocusForward="@+id/dead_point"
+            android:nextFocusRight="@+id/dead_point"
+            android:layout_weight="1"
+            android:id="@+id/next_iv"
+            android:layout_margin="15dp"
+            android:src="@android:drawable/ic_media_next"
+            android:adjustViewBounds="true"
+            android:background="@drawable/circular_focusable_button_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <!--
+            Dummy View used to prevent focus looping back to the first View
+        -->
+        <View
+            android:id="@+id/dead_point"
+            android:focusable="true"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>

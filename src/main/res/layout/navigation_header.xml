@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/colorPrimary"
+    android:layout_height="@dimen/navigation_header_height">
+    <TextView
+        android:id="@+id/title_tv"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/navigation_header_height"/>
+    <ImageView
+        android:focusable="false"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:background="@drawable/focusable_item_selector"
+        android:id="@+id/back_iv"
+        android:layout_alignParentLeft="true"
+        android:src="@drawable/back"
+        android:tint="@color/white"
+        android:layout_width="@dimen/navigation_icon_size"
+        android:layout_height="@dimen/navigation_icon_size" />
+    <ImageButton
+        android:background="@drawable/focusable_item_selector"
+        android:scaleType="centerInside"
+        android:adjustViewBounds="true"
+        android:nextFocusForward="@+id/prev_iv"
+        android:id="@+id/toggle_layout_iv"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/playlist"
+        android:tint="@color/white"
+        android:layout_width="@dimen/navigation_icon_size"
+        android:layout_height="@dimen/navigation_icon_size">
+        <requestFocus/>
+    </ImageButton>
+    <EditText
+        android:lines="1"
+        android:imeOptions="actionDone"
+        android:background="@drawable/focusable_edit_text_bg"
+        android:textColorHint="@color/white"
+        android:hint="@string/search_hint"
+        android:textColor="@color/colorAccent"
+        android:nextFocusForward="@+id/toggle_layout_iv"
+        android:nextFocusRight="@+id/toggle_layout_iv"
+        android:id="@+id/search_box"
+        android:layout_toLeftOf="@+id/toggle_layout_iv"
+        android:layout_toRightOf="@+id/back_iv"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!--
+        Dummy View used to prevent focus looping back to the first View
+    -->
+    <View
+        android:nextFocusForward="@+id/search_box"
+        android:id="@+id/dead_point"
+        android:focusable="true"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</RelativeLayout>

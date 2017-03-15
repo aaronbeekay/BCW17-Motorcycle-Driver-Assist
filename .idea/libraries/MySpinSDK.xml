@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MySpinSDK">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/mySPINServerSDK/MySpinSDK.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

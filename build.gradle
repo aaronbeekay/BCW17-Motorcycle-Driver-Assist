@@ -1,0 +1,56 @@
+apply plugin: 'com.android.application'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        // use http: instead of https: if behind proxy and gradle telling "sun.security.provider.certpath.SunCertPathBuilderException"
+        maven {
+            name 'JCenter http'
+            url "http://jcenter.bintray.com/"
+        }
+        mavenCentral()
+        // jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.2.0'
+    }
+}
+
+repositories {
+    flatDir {
+        dirs "lib"  // flatten library directory
+    }
+}
+
+
+allprojects {
+    repositories {
+        mavenLocal()
+        // use http: instead of https: if behind proxy and gradle telling "sun.security.provider.certpath.SunCertPathBuilderException"
+        maven {
+            name 'JCenter http'
+            url "http://jcenter.bintray.com/"
+        }
+        mavenCentral()
+        // jcenter()
+    }
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion '25.0.1'
+
+    defaultConfig {
+        minSdkVersion 19
+        targetSdkVersion 24
+    }
+
+    sourceSets.main {
+        jniLibs.srcDir "lib/mySPINServerSDK"
+    }
+}
+
+dependencies {
+    compile name: 'mySPINServerSDK/MySpinSDK'
+    compile 'com.android.support:appcompat-v7:25.0.1'
+}
