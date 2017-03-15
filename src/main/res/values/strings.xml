@@ -7,4 +7,12 @@
     <string name="current_playlist">Current Playlist</string>
     <string name="albums">Albums</string>
     <string name="search_hint">Search ..</string>
+
+    <string name="title_activity_warning">activity_warning</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="warning_roadway_statistical_hazard">HIGH ROAD HAZARD</string>
+    <string name="warning_dangerous_intersection">DANGEROUS INTERSECTION AHEAD</string>
+    <string name="warning_sharp_turn">SHARP TURN AHEAD</string>
+    <string name="warning_decreasing_radius">DECREASING RADIUS TURN</string>
 </resources>

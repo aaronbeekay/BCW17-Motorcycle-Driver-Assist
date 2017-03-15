@@ -16,7 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bosch.myspin.fcsample.FocusInputHandler;
+import com.bosch.myspin.fcsample.GCMListenerService;
 import com.bosch.myspin.fcsample.R;
+import com.bosch.myspin.fcsample.RegistrationIntentService;
+import com.bosch.myspin.fcsample.activity.WarningActivity.WarningActivity;
 import com.bosch.myspin.fcsample.fragment.AlbumsFragment;
 import com.bosch.myspin.fcsample.fragment.PlayListFragment;
 import com.bosch.myspin.fcsample.fragment.PlayerFragment;
@@ -37,6 +40,14 @@ import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.KE
  */
 public class MainActivity extends Activity implements MySpinFocusControlListener, View.OnClickListener {
 
+    private static final String TAG = "MainActivity";
+
+    // Values used to  pass warning type to WarningActivity
+    public static final String WARNING_TYPE = "com.bosch.motorcycleda.WARNING_TYPE";
+    public static final int WARNING_TYPE_DANGEROUSINTERSECTION = 1;
+    public static final int WARNING_TYPE_SHARPTURN = 2;
+    public static final int WARNING_TYPE_DECREASINGRADIUS = 3;
+
     private static final long CLICK_BLINK_DELAY = 200;
 
     private Fragment currentFragment;
@@ -46,10 +57,28 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
     private ImageView backIv;
     private EditText searchBox;
 
+    /* Determine which warning to display and call the activity which displays it to the rider. */
+    public void displayWarning(View view){
+        int warning_type;
+
+        Intent intent = new Intent(this, WarningActivity.class);
+        //TODO: Set the correct message. For now hard-coded to "dangerous intersection".
+        warning_type = WARNING_TYPE_DANGEROUSINTERSECTION;
+        intent.putExtra(WARNING_TYPE, warning_type);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_car);
+        setContentView(R.layout.activity_main);
+
+        Log.i(TAG, "Main instance starting up");
+
+        Intent mServiceIntent = new Intent(this, RegistrationIntentService.class);
+        startService(mServiceIntent);
+        Intent mListenerIntent = new Intent(this, GCMListenerService.class);
+        startService(mListenerIntent);
 
         // Register this application in the main launcher activity in the onCreate method to the
         // mySPIN ServerSDK.
@@ -58,63 +87,8 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
         } catch (MySpinException e) {
             e.printStackTrace();
         }
-
-        titleTv = (TextView) findViewById(R.id.title_tv);
-        toggleIv = (ImageView) findViewById(R.id.toggle_layout_iv);
-        backIv = (ImageView) findViewById(R.id.back_iv);
-        searchBox = (EditText) findViewById(R.id.search_box);
-        toggleIv.setOnClickListener(this);
-        backIv.setOnClickListener(this);
-        showPlayerFragment();
     }
 
-    // Navigate to player fragment
-    private void showPlayerFragment() {
-        currentFragment = new PlayerFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragment_holder, currentFragment).commit();
-
-        //update navigation toolbar
-        backIv.setVisibility(View.GONE);
-        toggleIv.setVisibility(View.VISIBLE);
-        searchBox.setVisibility(View.GONE);
-        toggleIv.setImageResource(R.drawable.playlist);
-        titleTv.setText(R.string.now_playing);
-
-        //As the player fragment is shown, the ForwardFocusId of the toggle button must be change
-        //to the id of the first button of the player.
-        toggleIv.setNextFocusForwardId(R.id.prev_iv);
-    }
-
-    // Navigate to playlist fragment
-    private void showPlaylistFragment() {
-        currentFragment = new PlayListFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragment_holder, currentFragment).commit();
-
-
-        //update navigation toolbar
-        backIv.setVisibility(View.VISIBLE);
-        toggleIv.setVisibility(View.VISIBLE);
-        searchBox.setVisibility(View.VISIBLE);
-        toggleIv.setImageResource(R.drawable.album);
-        titleTv.setText("");
-
-        //As the playlist fragment is shown, the ForwardFocusId of the toggle button must be change
-        //to the id of the list view.
-        toggleIv.setNextFocusForwardId(R.id.playlist_listview);
-    }
-
-    // Navigate to albums grid fragment
-    private void showAlbumsFragment() {
-        currentFragment = new AlbumsFragment();
-        getFragmentManager().beginTransaction().replace(R.id.fragment_holder, currentFragment).commit();
-
-        //update navigation toolbar
-        backIv.setVisibility(View.VISIBLE);
-        toggleIv.setVisibility(View.GONE);
-        searchBox.setVisibility(View.GONE);
-        titleTv.setText(R.string.albums);
-
-    }
 
     @Override
     protected void onResume() {
@@ -184,13 +158,7 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
             backIv.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    backIv.setSelected(false);
-                    if (currentFragment instanceof PlayListFragment)
-                        showPlayerFragment();
-                    else if (currentFragment instanceof AlbumsFragment)
-                        showPlaylistFragment();
-                    else
-                        toggleIv.requestFocus();
+
                 }
             }, CLICK_BLINK_DELAY);
         }
@@ -200,10 +168,7 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
     public void onClick(View v) {
         if (v.getId() == R.id.toggle_layout_iv) {
             if (currentFragment != null) {
-                if (currentFragment instanceof PlayerFragment)
-                    showPlaylistFragment();
-                else if (currentFragment instanceof PlayListFragment)
-                    showAlbumsFragment();
+
             }
         } else if (v.getId() == R.id.back_iv) {
             handleBackButton();

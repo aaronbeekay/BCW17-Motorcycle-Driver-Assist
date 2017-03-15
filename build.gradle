@@ -12,7 +12,8 @@ buildscript {
         // jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:2.3.0'
+        classpath 'com.google.gms:google-services:3.0.0'
     }
 }
 
@@ -53,4 +54,9 @@ android {
 dependencies {
     compile name: 'mySPINServerSDK/MySpinSDK'
     compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:support-v4:25.2.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
+    compile 'com.google.android.gms:play-services-gcm:10.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

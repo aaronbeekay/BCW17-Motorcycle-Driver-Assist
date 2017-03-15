@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "137057052662",
+    "firebase_url": "https://bcw-motorcycle-da.firebaseio.com",
+    "project_id": "bcw-motorcycle-da",
+    "storage_bucket": "bcw-motorcycle-da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:137057052662:android:304d2bb8a1e6ed8c",
+        "android_client_info": {
+          "package_name": "com.bosch.myspin.fcsample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "137057052662-jfkfvpf4f9lim2jn13vgdt74u7o5qrep.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQaIQ3ilXUBI6jIhB3m2wydgx-K5l6lOk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
