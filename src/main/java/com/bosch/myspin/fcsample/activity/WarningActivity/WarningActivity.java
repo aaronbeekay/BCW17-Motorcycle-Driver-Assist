@@ -32,13 +32,13 @@ public class WarningActivity extends Activity implements MySpinFocusControlListe
         setContentView(R.layout.activity_warning);
 
         // code for close button
-        Button closeButton = (Button) findViewById(R.id.bClose);
-        closeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        Button closeButton = (Button) findViewById(R.id.bClose);
+//        closeButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
 
         // Check what message we got and update the string appropriately
         Intent intent = getIntent();

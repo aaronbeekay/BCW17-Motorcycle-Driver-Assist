@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FCSample</string>
+    <string name="app_name">EyesAhead</string>
     <string name="connected_view_textview_content" />
     <string name="main_act" />
     <string name="song_title">Track title goes here</string>
