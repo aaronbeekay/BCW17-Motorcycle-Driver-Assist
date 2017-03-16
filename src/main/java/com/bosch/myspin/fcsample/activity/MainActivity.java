@@ -38,6 +38,9 @@ import com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlListener;
 import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.ACTION_CLICK;
 import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.ACTION_RELEASE;
 import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.KEYCODE_BACK;
+import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.KEYCODE_DPAD_DOWN;
+import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.KEYCODE_DPAD_LEFT;
+import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.KEYCODE_DPAD_RIGHT;
 
 /**
  * This activity demonstrates the usage of mySPIN focus control feature.
@@ -91,6 +94,7 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
         
     }
 
+    String lastResponse = "";
     /* Get the latest value from the server */
     Runnable runnableCode = new Runnable() {
         @Override
@@ -101,7 +105,10 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
                     @Override
                     public void onResponse(String response) {
                         Log.i(TAG, "Got string back " + response);
-
+                        if(lastResponse.equals(response)){
+                            return;
+                        }
+                        lastResponse = response;
                         switch(response) {
                             case "dangerous_intersection":
                                 displayWarning(WARNING_TYPE_DANGEROUSINTERSECTION);
@@ -181,7 +188,6 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
 
     @Override
     public void onBackPressed() {
-
         //we override onBackPressed in order to disable the back button
         if (!MySpinServerSDK.sharedInstance().isConnected())
             super.onBackPressed();
@@ -207,7 +213,6 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
      * Handles the mySPIN back focus control event
      */
     private void handleBackButton() {
-
 
         if(searchBox.isFocused()){
             if (!(searchBox.getSelectionEnd() == 0 && searchBox.getSelectionStart() == 0))
