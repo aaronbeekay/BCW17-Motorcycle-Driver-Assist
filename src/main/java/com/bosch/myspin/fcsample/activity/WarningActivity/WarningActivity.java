@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.bosch.myspin.fcsample.R;
@@ -17,6 +19,15 @@ public class WarningActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_warning);
+
+        // code for close button
+        Button closeButton = (Button) findViewById(R.id.bClose);
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         // Check what message we got and update the string appropriately
         Intent intent = getIntent();
@@ -36,6 +47,8 @@ public class WarningActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
 
     @Override
     protected void onResume() {

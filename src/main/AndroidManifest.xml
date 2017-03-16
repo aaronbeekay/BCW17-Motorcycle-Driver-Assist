@@ -51,8 +51,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.WarningActivity.WarningActivity"
-            android:noHistory="true" />
+            android:name=".activity.WarningActivity.WarningActivity" />
 
         <receiver
             android:name=".MyBroadcastReceiver"
