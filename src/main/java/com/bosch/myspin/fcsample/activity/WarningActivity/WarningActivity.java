@@ -1,6 +1,9 @@
 package com.bosch.myspin.fcsample.activity.WarningActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
@@ -10,7 +13,6 @@ import com.bosch.myspin.fcsample.activity.MainActivity;
 import com.bosch.myspin.serversdk.MySpinServerSDK;
 
 public class WarningActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,12 +39,21 @@ public class WarningActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
+        //registerReceiver(broadcastReceiver, new IntentFilter("com.bosch.myspin.fcsample.CLOSE_WARNING"));
         super.onResume();
 
         // registers a FocusControlListener, which listens to the keys that might
         // change focus state
         //MySpinServerSDK.sharedInstance().setFocusControlListener(this);
     }
+/*
+    private BroadcastReceiver broadcastReceiver() = new BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            finish();
+        }
+    }
+    */
 
     @Override
     protected void onPause() {

@@ -40,6 +40,7 @@ public class RegistrationIntentService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(TAG, "RegistrationIntentService is alive!");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         try {

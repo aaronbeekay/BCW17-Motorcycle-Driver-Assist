@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,6 +16,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bosch.myspin.fcsample.FocusInputHandler;
 import com.bosch.myspin.fcsample.GCMListenerService;
 import com.bosch.myspin.fcsample.R;
@@ -38,6 +45,7 @@ import static com.bosch.myspin.serversdk.focuscontrol.MySpinFocusControlEvent.KE
  * @author Muhannad Fakhouri
  * @since 2016-11-14
  */
+
 public class MainActivity extends Activity implements MySpinFocusControlListener, View.OnClickListener {
 
     private static final String TAG = "MainActivity";
@@ -50,6 +58,8 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
 
     private static final long CLICK_BLINK_DELAY = 200;
 
+    private final String url = "https://s3.eu-central-1.amazonaws.com/bcw2017/bcw2017_bucket2.txt";
+
     private Fragment currentFragment;
 
     private TextView titleTv;
@@ -57,16 +67,72 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
     private ImageView backIv;
     private EditText searchBox;
 
-    /* Determine which warning to display and call the activity which displays it to the rider. */
-    public void displayWarning(View view){
-        int warning_type;
+    private Handler handler;
+    private RequestQueue queue;
 
-        Intent intent = new Intent(this, WarningActivity.class);
-        //TODO: Set the correct message. For now hard-coded to "dangerous intersection".
-        warning_type = WARNING_TYPE_DANGEROUSINTERSECTION;
-        intent.putExtra(WARNING_TYPE, warning_type);
-        startActivity(intent);
+    public int current_warning;
+
+    public int get_current_warning(){
+        return current_warning;
     }
+
+    /* Determine which warning to display and call the activity which displays it to the rider. */
+    public void displayWarning(int warning_type) {
+        if (warning_type != current_warning) {
+            current_warning = warning_type;
+            Intent intent = new Intent(this, WarningActivity.class);
+            intent.putExtra(WARNING_TYPE, warning_type);
+            startActivity(intent);
+        }
+    }
+
+    /* Dismiss whatever warning is currently up */
+    public void closeWarning(){
+        
+    }
+
+    /* Get the latest value from the server */
+    Runnable runnableCode = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                // request a string response from that url
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.i(TAG, "Got string back " + response);
+
+                        switch(response) {
+                            case "dangerous_intersection":
+                                displayWarning(WARNING_TYPE_DANGEROUSINTERSECTION);
+                                break;
+                            case "sharp_turn":
+                                displayWarning(WARNING_TYPE_SHARPTURN);
+                                break;
+                            case "decreasing_radius":
+                                displayWarning(WARNING_TYPE_DECREASINGRADIUS);
+                                break;
+                            default:
+                                Log.d(TAG, "Invalid response from control file");
+                                closeWarning();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.w(TAG, "Error in Volley request");
+                    }
+                });
+
+                queue.add(stringRequest);
+            } finally {
+                handler.postDelayed(runnableCode, 2000);
+            }
+
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,10 +141,16 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
 
         Log.i(TAG, "Main instance starting up");
 
+        /* disabled: GCM stuff
         Intent mServiceIntent = new Intent(this, RegistrationIntentService.class);
         startService(mServiceIntent);
         Intent mListenerIntent = new Intent(this, GCMListenerService.class);
         startService(mListenerIntent);
+        */
+
+        queue = Volley.newRequestQueue(this);
+        handler = new Handler();
+        handler.post(runnableCode);
 
         // Register this application in the main launcher activity in the onCreate method to the
         // mySPIN ServerSDK.
@@ -88,7 +160,6 @@ public class MainActivity extends Activity implements MySpinFocusControlListener
             e.printStackTrace();
         }
     }
-
 
     @Override
     protected void onResume() {
